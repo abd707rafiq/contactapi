@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const Contact = require('../models/Supplier'); // Import your Contact model here
-/// you should use your uri
+const Contact = require('../models/Supplier'); 
 
+uri = "mongodb+srv://admin:@cluster0.7ru5mzm.mongodb.net/";
 const connectDB = () => {
   
   return mongoose.connect(uri, {
@@ -10,26 +10,21 @@ const connectDB = () => {
   })
   .then(() => {
     console.log('Connected to MongoDB');
-
-    // Create a new contact
     
-    const contactType = 'supplier' || 'customer'; // This will always result in 'supplier'
-const entity = 'business' || 'individual'; // This will always result in 'business'
-
+    const contactType = 'supplier' || 'customer'; 
+const entity = 'business' || 'individual'; 
+const assignedTo= 'Demo Admin' || 'Ismail Shah';
+const payTerm= 'Month'||'Days'
 const newContact = new Contact({
     contactType: contactType,
     entity: entity,
-    // Other fields
+    assignedTo:assignedTo,
+    payTerm:payTerm
+ 
 });
 
 
-    newContact.save()
-      .then(savedContact => {
-        console.log('Contact saved:', savedContact);
-      })
-      .catch(error => {
-        console.error('Error saving contact:', error);
-      });
+    
   })
   .catch(error => {
     console.error('Error connecting to MongoDB:', error);
