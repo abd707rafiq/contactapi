@@ -25,6 +25,8 @@ const supplierSchema = new Schema({
     lastName: String,
     mobile:  String,
     alternateContactNumber:  String,
+    purchaseDue:Number,
+    purchaseReturn:Number,
 
      // Optional field
     landline: String, // Optional field
@@ -40,21 +42,21 @@ const supplierSchema = new Schema({
         type: String,
         enum: ['Month', 'Days']
     },
-    addressLine1: String, // Address line 1
-    addressLine2: String, // Address line 2
+    addressLine1: String, 
+    addressLine2: String, 
     city: String,
     state: String,
     country: String,
     zipCode: String, // Zip/Postal Code
-    customField1: String, // Custom Field 1
-    customField2: String, // Custom Field 2
-    customField3: String, // Custom Field 3
-    customField4: String, // Custom Field 4
-    customField5: String, // Custom Field 5
-    customField6: String, // Custom Field 6
-    customField7: String, // Custom Field 7
-    customField8: String, // Custom Field 8
-    customField9: String, // Custom Field 9
+    customField1: String, 
+    customField2: String, 
+    customField3: String, 
+    customField4: String, 
+    customField5: String, 
+    customField6: String, 
+    customField7: String, 
+    customField8: String, 
+    customField9: String, 
     customField10: String,
     shippingAdress:String,
 
