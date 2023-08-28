@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router();
 
+
 const { getAllContacts, createSupplierContact, updateSupplierContact,
     deleteSupplierContact,
     getSupplierContactById,
@@ -10,13 +11,19 @@ const { getAllContacts, createSupplierContact, updateSupplierContact,
     updateCustomerContact,
     deleteCustomerContact,
     getCustomerContactById,
-    deleteAllCustomerContacts
+    deleteAllCustomerContacts,
+    exportContacts
+
+    
 
 
 
 } = require("../controllers/Contact")
 
+
 router.get('/contacts/:type', getAllContacts);
+
+router.get('/contacts/:type/export', exportContacts);
 // supplier rote
 router.post('/contacts/supplier', createSupplierContact);
 router.put('/contacts/supplier/:id', updateSupplierContact);
@@ -29,6 +36,11 @@ router.put('/contacts/customer/:id',updateCustomerContact);
 router.delete('/contacts/customer/:id',deleteCustomerContact);
 router.get('/contacts/customer/:id', getCustomerContactById);
 router.delete('/contacts/customer', deleteAllCustomerContacts);
+
+//customergroup
+
+
+
 module.exports = router;
 
 
