@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Contact = require('../models/Supplier'); 
-
-uri = "mongodb+srv://admin:@cluster0.7ru5mzm.mongodb.net/";
+const CustomerGroup=require('../models/CustomerGroup')
+uri = "mongodb+srv://admin:b3XoeKSLsxBxbGmM@cluster0.7ru5mzm.mongodb.net/";
 const connectDB = () => {
   
   return mongoose.connect(uri, {
@@ -11,7 +11,7 @@ const connectDB = () => {
   .then(() => {
     console.log('Connected to MongoDB');
     
-    const contactType = 'supplier' || 'customer'; 
+    const contactType = 'supplier' || 'customer'  ; 
 const entity = 'business' || 'individual'; 
 const assignedTo= 'Demo Admin' || 'Ismail Shah';
 const payTerm= 'Month'||'Days'
@@ -22,6 +22,7 @@ const newContact = new Contact({
     payTerm:payTerm
  
 });
+
 
 
     

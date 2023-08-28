@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const supplierSchema = new Schema({
     contactType: {
         type: String,
-        enum: ['supplier', 'customer', 'both'],
+        enum: ['supplier', 'customer'],
         required: true
     },
     entity: {
@@ -12,9 +12,14 @@ const supplierSchema = new Schema({
         enum: ['individual', 'business'],
 
     },
+
     contactId: {
         type: String,
         default: new mongoose.Types.ObjectId().toString()
+    },
+    customerGroup: {
+        type: Schema.Types.ObjectId,
+        ref: 'CustomerGroup'
     },
     businessName:String,
 
@@ -27,6 +32,8 @@ const supplierSchema = new Schema({
     alternateContactNumber:  String,
     purchaseDue:Number,
     purchaseReturn:Number,
+    sellDue:Number,
+    sellReturn:Number,
 
      // Optional field
     landline: String, // Optional field

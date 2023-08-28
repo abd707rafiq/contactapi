@@ -3,12 +3,18 @@
 
 // get all contacts according to thier contacttype
 const Contact = require('../models/Supplier')
+const json2csv = require('json2csv').parse;
+const PDFDocument = require('pdfkit');
+const excel = require('excel4node');
+
 const getAllContacts = async (req, res) => {
   const contactType = req.params.type;
   const showAdvanceBalance = req.query.advanceBalance === 'true';
   const showOpeningBalance = req.query.openingBalance === 'true';
   const showPurchaseDue=req.query.purchaseDue==='true';
   const showPurchaseReturn=req.query.purchaseReturn ==='true';
+  const showSellDue=req.query.sellDue==='true';
+  const showSellReturn=req.query.sellReturn==='true'
   // for contacttype supplier
   if (contactType === 'supplier') {
     try {
@@ -45,18 +51,41 @@ const getAllContacts = async (req, res) => {
     }
   }
 // for contact type cutomer
-// fileration for customer contact is not added yet
+
 
   else if (contactType === 'customer') {
-    try{
+    try {
       let contacts;
-       contacts=await Contact.find({contactType:'customer'});
-       res.status(200).json(contacts);
-    }catch(error){
-      console.error('Error fetching contacts ',error);
-      res.status(500).json({error:'INternal server error'});
-    }
+      if (showAdvanceBalance || showOpeningBalance || showSellDue ||showSellReturn) {
+        const query = {
+          contactType: 'customer'
+        };
 
+        if (showAdvanceBalance) {
+          query.advanceBalance = { $gt: 0 };
+        }
+
+        if (showOpeningBalance) {
+          query.openingBalance = { $gt: 0 };
+        }
+        if (showSellDue) {
+          query.sellDue = { $gt: 0 };
+        }
+        if(showSellReturn){
+          query.sellReturn={$gt:0};
+        }
+      
+        
+        contacts = await Contact.find(query);
+        
+      } else {
+        contacts = await Contact.find({ contactType: 'customer' });
+      }
+      res.status(200).json(contacts);
+    } catch (error) {
+      console.error('Error fetching contacts:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
     
   } 
   
@@ -65,6 +94,57 @@ const getAllContacts = async (req, res) => {
   }
 
 };
+
+const exportContacts = async (req, res) => {
+  const contactType = req.params.type;
+
+  try {
+    let contacts;
+    if (contactType === 'supplier' || contactType === 'customer') {
+      
+      contacts = await Contact.find({ contactType });
+
+     
+      res.attachment(`${contactType}_contacts.csv`);
+      res.type('csv');
+      const csvData = json2csv(contacts);
+      res.send(csvData);
+
+      
+      res.attachment(`${contactType}_contacts.pdf`);
+      const pdfDoc = new PDFDocument();
+      pdfDoc.pipe(res);
+      contacts.forEach(contact => {
+        pdfDoc.text(JSON.stringify(contact));
+        pdfDoc.moveDown();
+      });
+      pdfDoc.end();
+
+     
+      res.attachment(`${contactType}_contacts.xlsx`);
+      const wb = new excel.Workbook();
+      const ws = wb.addWorksheet('Contacts');
+      const style = wb.createStyle({
+        font: {
+          size: 12,
+        },
+      });
+      contacts.forEach((contact, index) => {
+        Object.keys(contact).forEach((field, columnIndex) => {
+          ws.cell(index + 1, columnIndex + 1).string(contact[field].toString()).style(style);
+        });
+      });
+      const excelBuffer = await wb.writeToBuffer();
+      res.send(excelBuffer);
+    } else {
+      res.status(400).json({ error: 'Invalid contact type' });
+    }
+  } catch (error) {
+    console.error('Error exporting contacts:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 //crud for supplier
 /// add new supplier
 
@@ -171,7 +251,7 @@ const createCustomerContact= async(req,res)=>{
     res.status(201).json(savedCustomerData);
 
   }catch(error){
-    console.log(error)('Customer data add',error);
+    console.error('Customer data add',error);
   }
 
 
@@ -257,6 +337,6 @@ module.exports = {
   updateCustomerContact,
   deleteCustomerContact,
   getCustomerContactById,
-  deleteAllCustomerContacts
+  deleteAllCustomerContacts,exportContacts
 
 };
