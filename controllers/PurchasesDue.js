@@ -67,7 +67,7 @@ const getAllPurchases = async (req, res) => {
             return simplifiedPurchase;
         });
 
-        /
+        
         const totals = {
             grandTotal,
             paymentDue,
