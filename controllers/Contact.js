@@ -205,9 +205,9 @@ const deleteSupplierContact = async (req, res) => {
 
 /// view supplier contact by its id
 const getSupplierContactById = async (req, res) => {
-  const contactId = req.params.id;
+  const id = req.params.id;
   try {
-    const supplierContact = await Contact.findById(contactId);
+    const supplierContact = await Contact.findById(id);
     if (supplierContact) {
       res.status(200).json(supplierContact);
     } else {

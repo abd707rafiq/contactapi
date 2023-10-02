@@ -25,7 +25,7 @@ router.get('/contacts/:type', getAllContacts);
 
 router.get('/contacts/:type/export', exportContacts);
 // supplier rote
-router.post('/contacts/supplier', createSupplierContact);
+router.post('/contacts/:type', createSupplierContact);
 router.put('/contacts/supplier/:id', updateSupplierContact);
 router.delete('/contacts/supplier/:id', deleteSupplierContact);
 router.get('/contacts/supplier/:id', getSupplierContactById);

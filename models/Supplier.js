@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+
 const supplierSchema = new Schema({
+    
+    
     contactType: {
         type: String,
         enum: ['supplier', 'customer'],
@@ -15,7 +18,7 @@ const supplierSchema = new Schema({
 
     contactId: {
         type: String,
-        default: new mongoose.Types.ObjectId().toString()
+        default: new mongoose.Types.ObjectId
     },
     customerGroup: {
         type: Schema.Types.ObjectId,
